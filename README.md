@@ -6,6 +6,8 @@ It is a console-based program written in Python 3, which allows the user to sear
 
 The user inputs a text file (path), and a REGEX search pattern, and the program will print lines from the file where the matches are found.
 
+Indidentally, This was done in Ubuntu Linux through WSL.
+
 ## Instructions
 ...
 

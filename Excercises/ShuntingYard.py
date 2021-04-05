@@ -1,60 +1,60 @@
 #! /usr/bin/env python3
 """ Shunting Yard Implementation Test"""
+# Note: I think "functions" in the psudocode on wikipedia refers to things like ^. Maybe implement this later
 
+# Convert an infix mathmatical expression (string) to a postfix one. Works for numbers less than 10
 def toPostfix(infix):
     """ Perform shunting yard algorithm on a intfix expression, converting it to postfix"""
     output = ""  # Output stack - the numbers in our expression
-    operators = "" # Operator stack (string = array = stack, just easier than array)
-    precedence = {} # Operator precedence dictionary - operator character mapped to an arbitrary numeric value representing its precedence (BOMDAS)
+    operators = "" # Operator stack (using string for ease but could be a list)
+    precedence = {"*": 100, "/": 90, "+": 80, "-": 70, "(": 60, ")": 50} # Operator precedence dictionary - operator characters mapped to an arbitrary numeric value representing their precedence (BOMDAS)
+    
     #Loop through characters
     for c in infix:
         #If c is a number
         if (c.isdigit()):
             output += c
-            print("Output is now ", output)
         #Else if c is a function - ignoring these for now
         #Else if c is an operator - + - * / might account for x and division ASCII symbol later
         elif c in {"+", "-", "*", "/"}:
-            #operators += c
             # While there is still an operator left at the top of the stack
             #       AND the operator at the top of the stack has greater precedence
             #       OR the operator at the top of the stack has equal precedence and the token is left associative (don't know what this means, ignoring for now)
             #       AND that operator is not a left parenthesis '('
             # Note: \ tells python that a statement will continue on to the next line
-            while len(operators > 0 and \
-                  precedence[operators[-1]] > precedence[c] and \
-                  c != '(':
-                # Push operator from top of stack to output - They worded this differently? "pop operators from the operator stack onto the output queue."
-                # push top operator to output
+            while len(operators) > 0 and operators[-1] != '(' and precedence[operators[-1]] > precedence[c]:
+                # Pop the operator from the operator stack onto the output queue.
                 output += operators[-1]
-                # remove top operator from operator stack
-                operators = operators[:-1}]
-
-#            else if the token is an operator then:
-#                while ((there is an operator at the top of the operator stack)
-#                    and ((the operator at the top of the operator stack has greater precedence)
-#                        or (the operator at the top of the operator stack has equal precedence and the token is left associative))
-#                    and (the operator at the top of the operator stack is not a left parenthesis)):
-#                    pop operators from the operator stack onto the output queue.
-#                push it onto the operator stack.
-#            else if the token is a left parenthesis (i.e. "("), then:
-#                push it onto the operator stack.
-#            else if the token is a right parenthesis (i.e. ")"), then:
-#                while the operator at the top of the operator stack is not a left parenthesis:
-#                    pop the operator from the operator stack onto the output queue.
-#                /* If the stack runs out without finding a left parenthesis, then there are mismatched parentheses. */
-#                if there is a left parenthesis at the top of the operator stack, then:
-#                    pop the operator from the operator stack and discard it
-#                if there is a function token at the top of the operator stack, then:
-#                    pop the function from the operator stack onto the output queue.
-#        /* After while loop, if operator stack not null, pop everything to output queue */
-#        if there are no more tokens to read then:
-#            while there are still operator tokens on the stack:
-#                /* If the operator token on the top of the stack is a parenthesis, then there are mismatched parentheses. */
-#                pop the operator from the operator stack onto the output queue.
+                operators = operators[:-1]
+            # Push it onto the operator stack
+            operators += c
+        # Else if token is a left parenthesis (
+        elif c == "(":
+            # Push c to operator stack
+            operators += c
+        elif c == ")":
+            while operators[-1] != "(":
+                # Pop the operator from the operator stack onto the output queue.
+                output += operators[-1]
+                operators = operators[:-1]
+            # If there is a left bracket at the top of the stack, remove it
+            if operators[-1] == '(':
+                # Pop the operator from the operator stack and discard it
+                operators = operators[:-1]
+            # if there is a function token at the top of the operator stack... (Ignoring this for now)
+            
+    # If there are any operators left in the stack, append to output
+    while len(operators) > 0:
+        # Push operator from top of stack to output
+        output += operators[-1]
+        # Remove top operator from stack
+        operators = operators[:-1]
     return output
 
-#infix
-infix = "2+3-5*2"
+#This if statement allows us to only run the following code if this file is run directly as a script. Common in Python, good for tests.
+if __name__ == "__main__":
+    infix = "3+4*(2-1)"
 
-print(toPostfix(infix))
+    # f strings allow us to insert expressions inside curly brackets, just a convenient way of formatting prints.
+    print(f"Infix:   {infix}")
+    print(f"Postfix: {toPostfix(infix)}")

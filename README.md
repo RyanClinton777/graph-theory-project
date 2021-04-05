@@ -16,7 +16,7 @@ Indidentally, This was done in Ubuntu Linux through WSL.
 
 ## Questions
 ### What is a regular expression?
-**Regular expressions (Regex)** are a way of performing advanced, dynamic, programatic find and replace operations on a piece of text. They work by providing a syntax for the user to enter a pattern, which are then checked against the text.
+**Regular expressions (Regex)** are a way of performing advanced, dynamic, programatic find and replace operations on a piece of text. They work by providing a syntax for the user to enter a pattern, which are then checked against the text. *Regular Expressions are equivalent to **Finite Automata***, and we can think of a regular expression being input by the user as creating an equivalent finite automoton, which then runs on the text.
 
 In normal search operations, an exact phrase must be entered for matches to be found, but regular expressions allow us to do much more advanced searches. 
 Some examples of patterns we can account for:

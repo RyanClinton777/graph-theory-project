@@ -52,7 +52,7 @@ def toPostfix(infix):
 
 #This if statement allows us to only run the following code if this file is run directly as a script. Common in Python, good for tests.
 if __name__ == "__main__":
-    infix = "1.(2.2)*.1" # Works for any alphabet
+    infix = "a.(b.b)*.a" # Works for any alphabet
 
     # f strings allow us to insert expressions inside curly brackets, just a convenient way of formatting prints.
     print(f"Infix:   {infix}")

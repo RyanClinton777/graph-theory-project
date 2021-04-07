@@ -14,6 +14,8 @@ class State:
         # Boolean, wether or not this state is an accept state
         self.isAccept = isAccept
 
+        #print(f"STATE CREATED - LABEL: {self.label}")
+
 class NFA:
     """ Non-deterministic Finite Automaton """
     def __init__(self, start, end):
@@ -23,11 +25,71 @@ class NFA:
         # End state
         self.end = end
 
-    def match(s):
+    # Note: “takes 1 positional argument but 2 were given” error happens when you forget to put self as an arg in a class method
+    def match(self, s):
         """ Return true if s is accepted by this NFA """
-        # ...
+        
+        # Keep track of current states. Initalise with start state
+        # Loop through string (e.g. abba) one char at a time
+        # States have one label. If current state has label of c, move to all connected states. 
+        # If any states we land in have an empty arrow, immediately move to those, as well as staying in the original.
+        # Now no longer in the first state,
+        # If we end up in a state without a matching label, we are no longer in that state.
+        
+        # Note: I spent hours trying to figure this out (see old.py) but eventually found your old video from 2020, 
+        #       I'm adapting from that because I couldn't figure it out myself (missed the recursion I think), hope that's ok.
+
+        # Keep track of current states. Initalise with start state
+        currentStates = []
+        # Previous states
+        previousStates = []
+
+        # Start with start state. This adds the given state to the given list if it isn't already there, and looks for empty arrows, callings itself for those if any are found.
+        self.addAndExploreState(self.start, currentStates)
+
+        # Loop through characters in string
+        for c in s:
+            print(f"For letter {c}") #DEBUG
+            # Store previous states
+            previousStates = currentStates
+            # Reset current states
+            currentStates = []
+
+            # Loop through current states - (for loop was running twice and converting the element from a state to a list the second time, no idea why so I switched to a range loop)
+            for state in previousStates:
+                # If not None (redundent?)
+                if state.label != None:
+                    # If current state has a label matching the current character
+                    if state.label == c:
+                        self.addAndExploreState(state.arrows[0], currentStates)
+
+        #Finally check if any of our states are accept states
+        for state in currentStates:
+            if state.isAccept == True:
+                # Return true if any found
+                return True
+        # No accept states if code reaches this point, return false
+        return False
+
+    def addAndExploreState(self, state, stateList):
+        """ This adds the given state to the given list if it isn't already there, and looks for empty (None) arrows, callings itself recursively for those if any are found.
+            (Adapted from code from last years vids, couldn't figure this out on my own)
+            (https://web.microsoftstream.com/video/dc439334-70cd-45b1-944b-af59c16f7d3a)
+        """
+        print(f"STATE: isAccept: {state.isAccept}")
+        # If state not already in stateList
+        if state not in stateList:
+            # Add it
+            stateList.append(state)
+            #If state label is empty/epsilon/None
+            if state.label == None:
+                # Loop through arrows of this state, calling this method again on those.
+                for nextState in state.arrows:
+                    self.addAndExploreState(nextState, stateList)
 
 
+
+# (Not a class method)
 def toNFA(postfix):
     """ Takes a postfix RE and converts it to an NFA """
     # NFA stack
@@ -120,10 +182,14 @@ def toNFA(postfix):
     else : 
         return stack[0]
 
-# Tests
+# Tests # {"abba", "abbbba", "aba", "abb", "bba", "babba", "aa", ""}
 if (__name__ == "__main__"):
-    for postfix in {"abb.*.a.", "100.*.1."}:
-        print(f"postfix:   {postfix}")
-        print(f"NFA:       {toNFA(postfix)}")
+    for postfix in {"abb.*.a."}:
+        nfa = toNFA(postfix)
+
+        print(f"---postfix:   {postfix}")
+        print(f"---NFA:       {nfa}")
+        for test in {"abba"}:
+            print(f"{test}\taccepted by NFA?: {nfa.match(postfix)}")
 
 # Note: shift+tab in VS code to shift code indentation left

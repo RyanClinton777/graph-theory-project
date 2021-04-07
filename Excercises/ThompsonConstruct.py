@@ -14,8 +14,6 @@ class State:
         # Boolean, wether or not this state is an accept state
         self.isAccept = isAccept
 
-        #print(f"STATE CREATED - LABEL: {self.label}")
-
 class NFA:
     """ Non-deterministic Finite Automaton """
     def __init__(self, start, end):
@@ -49,13 +47,13 @@ class NFA:
 
         # Loop through characters in string
         for c in s:
-            print(f"For letter {c}") #DEBUG
+            #print(f"For letter {c}") #DEBUG
             # Store previous states
             previousStates = currentStates
             # Reset current states
             currentStates = []
 
-            # Loop through current states - (for loop was running twice and converting the element from a state to a list the second time, no idea why so I switched to a range loop)
+            # Loop through current states
             for state in previousStates:
                 # If not None (redundent?)
                 if state.label != None:
@@ -76,7 +74,7 @@ class NFA:
             (Adapted from code from last years vids, couldn't figure this out on my own)
             (https://web.microsoftstream.com/video/dc439334-70cd-45b1-944b-af59c16f7d3a)
         """
-        print(f"STATE: isAccept: {state.isAccept}")
+        #print(f"STATE: isAccept: {state.isAccept}")
         # If state not already in stateList
         if state not in stateList:
             # Add it
@@ -97,7 +95,7 @@ def toNFA(postfix):
     
     # Loop through characters
     for c in postfix:
-        # Kleene star * --- Accept if 0 or more strings matching pattern are present
+        # Kleene star * --- Accept if 0 or more strings matching pattern are present (E.G. (a.b.)* would accept "" "ab", "abab" etc...)
         if c == "*":
             # Pop top NFA from stack
             nfa1 = stack[-1]
@@ -109,7 +107,7 @@ def toNFA(postfix):
 
             # New start state points at old start state, and the new end state
             start.arrows.append(nfa1.start)
-            start.arrows.append(nfa1.end)
+            start.arrows.append(end)
 
             # Old end state no longer accepts
             nfa1.end.isAccept = False
@@ -132,7 +130,7 @@ def toNFA(postfix):
             # NFA1 end state no longer accept
             nfa1.end.isAccept = False
             # Make end state of 1 point to start of 2
-            nfa1.end.arrows = [nfa2.start]
+            nfa1.end.arrows.append(nfa2.start)
             # Create a new NFA with start from 1 and end from 2
             nfa = NFA(nfa1.start, nfa2.end)
 
@@ -156,8 +154,8 @@ def toNFA(postfix):
             nfa2.end.isAccept = False
 
             # Original end states now point to new end state
-            nfa1.end.arrows = [end]
-            nfa2.end.arrows = [end]
+            nfa1.end.arrows.append(end)
+            nfa2.end.arrows.append(end)
 
             # Create new NFA and append to stack
             nfa = NFA(start, end)

@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-""" Shunting Yard Implementation Test"""
+""" Shunting Yard Implementation - Converts an infix Regular Expression to a postfix one."""
 # Note: I think "functions" in the psudocode on wikipedia refers to things like ^. Maybe implement this later
 
 # Convert an infix regular expression (string) to a postfix one.

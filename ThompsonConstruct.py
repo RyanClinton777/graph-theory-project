@@ -71,8 +71,7 @@ class NFA:
 
     def addAndExploreState(self, state, stateList):
         """ This adds the given state to the given list if it isn't already there, and looks for empty (None) arrows, callings itself recursively for those if any are found.
-            (Adapted from code from last years vids, couldn't figure this out on my own)
-            (https://web.microsoftstream.com/video/dc439334-70cd-45b1-944b-af59c16f7d3a)
+            (I tried to figure this out on my own before the video came out but failed, see Old.py for attempts)
         """
         #print(f"STATE: isAccept: {state.isAccept}")
         # If state not already in stateList
@@ -175,7 +174,6 @@ def toNFA(postfix):
     # Ultimately there will only be one NFA, return it
     # Return None to indicate error if stack > 0
     if len(stack) > 1:
-        print(f"ERROR: Stack > 1 ({len(stack)})")
         return None
     else : 
         return stack[0]

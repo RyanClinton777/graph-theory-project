@@ -146,7 +146,7 @@ def toNFA(postfix):
             # Create end state
             end = State(None, [], True)
             # Create start state with arrows to the start states of both NFAs
-            start = State(c, [nfa1.start, nfa2.start], False)
+            start = State(None, [nfa1.start, nfa2.start], False)
 
             # End states of both NFAs no longer accept states
             nfa1.end.isAccept = False

@@ -26,16 +26,12 @@ class NFA:
     # Note: “takes 1 positional argument but 2 were given” error happens when you forget to put self as an arg in a class method
     def match(self, s):
         """ Return true if s is accepted by this NFA """
-        
         # Keep track of current states. Initalise with start state
         # Loop through string (e.g. abba) one char at a time
         # States have one label. If current state has label of c, move to all connected states. 
         # If any states we land in have an empty arrow, immediately move to those, as well as staying in the original.
         # Now no longer in the first state,
         # If we end up in a state without a matching label, we are no longer in that state.
-        
-        # Note: I spent hours trying to figure this out (see old.py) but eventually found your old video from 2020, 
-        #       I'm adapting from that because I couldn't figure it out myself (missed the recursion I think), hope that's ok.
 
         # Keep track of current states. Initalise with start state
         currentStates = []
@@ -96,69 +92,24 @@ def toNFA(postfix):
     for c in postfix:
         # Kleene star * --- Accept if 0 or more strings matching pattern are present (E.G. (a.b.)* would accept "" "ab", "abab" etc...)
         if c == "*":
-            # Pop top NFA from stack
-            nfa1 = stack[-1]
-            stack = stack[:-1]
-
-            # Create new start and states
-            start = State(None, [], False)
-            end = State(None, [], True)
-
-            # New start state points at old start state, and the new end state
-            start.arrows.append(nfa1.start)
-            start.arrows.append(end)
-
-            # Old end state no longer accepts
-            nfa1.end.isAccept = False
-            # Old end state now points to the new end state
-            nfa1.end.arrows.append(end)
-            # Old end state now points to old start state.
-            nfa1.end.arrows.append(nfa1.start)
-
-            # Create new NFA and append to stack
-            nfa = NFA(start, end)
-            stack.append(nfa)
+            # Lists in Python are immutable, so the functions will be changing a copy. They return the copy, so we can set it as the new value of the original
+            # Learned this here: https://stackoverflow.com/questions/986006/how-do-i-pass-a-variable-by-reference
+            stack = dfa_KleeneStar(stack)
         # Concatinate . --- Accept if both are true
         elif c == ".":
-            # Pop last two NFAs from stack
-            nfa2 = stack[-1]
-            stack = stack[:-1]
-            nfa1 = stack[-1]
-            stack = stack[:-1]
-
-            # NFA1 end state no longer accept
-            nfa1.end.isAccept = False
-            # Make end state of 1 point to start of 2
-            nfa1.end.arrows.append(nfa2.start)
-            # Create a new NFA with start from 1 and end from 2
-            nfa = NFA(nfa1.start, nfa2.end)
-
-            # Put new NFA on the stack
-            stack.append(nfa)
+            stack = dfa_Concatinate(stack)
         # OR | --- Accept if either is true.
         elif c == "|":
-            # Pop last two NFAs from stack
-            nfa2 = stack[-1]
-            stack = stack[:-1]
-            nfa1 = stack[-1]
-            stack = stack[:-1]
-
-            # Create end state
-            end = State(None, [], True)
-            # Create start state with arrows to the start states of both NFAs
-            start = State(None, [nfa1.start, nfa2.start], False)
-
-            # End states of both NFAs no longer accept states
-            nfa1.end.isAccept = False
-            nfa2.end.isAccept = False
-
-            # Original end states now point to new end state
-            nfa1.end.arrows.append(end)
-            nfa2.end.arrows.append(end)
-
-            # Create new NFA and append to stack
-            nfa = NFA(start, end)
-            stack.append(nfa)
+            stack = dfa_Or(stack)
+        # One or More + --- Accept one or more Strings matching the pattern are present - Same as Kleene star, but there must be at least one.
+        #elif c == "+":
+            # This is equivilent to what could be written as 'aa*' - i.e. one 'a' followed by zero or more 'a's == one or more 'a's.
+            # But this operator provides a more concise syntax: 'a+'
+            # To do this, we simply apply Concatination, followed by the Kleen star operator.
+            
+            # Stack going out of bounds, leaving this for now
+            #stack = dfa_Concatinate(stack)
+            #stack = dfa_KleeneStar(stack)
         # Non-special characters
         else:
             # Create standard NFA
@@ -177,6 +128,80 @@ def toNFA(postfix):
         return None
     else : 
         return stack[0]
+
+def dfa_KleeneStar(stack):
+    # Pop top NFA from stack
+    nfa1 = stack[-1]
+    stack = stack[:-1]
+
+    # Create new start and states
+    start = State(None, [], False)
+    end = State(None, [], True)
+
+    # New start state points at old start state, and the new end state
+    start.arrows.append(nfa1.start)
+    start.arrows.append(end)
+
+    # Old end state no longer accepts
+    nfa1.end.isAccept = False
+    # Old end state now points to the new end state
+    nfa1.end.arrows.append(end)
+    # Old end state now points to old start state.
+    nfa1.end.arrows.append(nfa1.start)
+
+    # Create new NFA and append to stack
+    nfa = NFA(start, end)
+    stack.append(nfa)
+
+    # Return new stack
+    return stack
+
+def dfa_Concatinate(stack):
+    # Pop last two NFAs from stack
+    nfa2 = stack[-1]
+    stack = stack[:-1]
+    nfa1 = stack[-1]
+    stack = stack[:-1]
+
+    # NFA1 end state no longer accept
+    nfa1.end.isAccept = False
+    # Make end state of 1 point to start of 2
+    nfa1.end.arrows.append(nfa2.start)
+    # Create a new NFA with start from 1 and end from 2
+    nfa = NFA(nfa1.start, nfa2.end)
+
+    # Put new NFA on the stack
+    stack.append(nfa)
+    
+    # Return new stack
+    return stack
+
+def dfa_Or(stack):
+    # Pop last two NFAs from stack
+    nfa2 = stack[-1]
+    stack = stack[:-1]
+    nfa1 = stack[-1]
+    stack = stack[:-1]
+
+    # Create end state
+    end = State(None, [], True)
+    # Create start state with arrows to the start states of both NFAs
+    start = State(None, [nfa1.start, nfa2.start], False)
+
+    # End states of both NFAs no longer accept states
+    nfa1.end.isAccept = False
+    nfa2.end.isAccept = False
+
+    # Original end states now point to new end state
+    nfa1.end.arrows.append(end)
+    nfa2.end.arrows.append(end)
+
+    # Create new NFA and append to stack
+    nfa = NFA(start, end)
+    stack.append(nfa)
+
+    # Return new stack
+    return stack
 
 # Tests # {"abba", "abbbba", "aba", "abb", "bba", "babba", "aa", ""}
 if (__name__ == "__main__"):

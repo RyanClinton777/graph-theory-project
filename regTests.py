@@ -1,14 +1,16 @@
 import ShuntingYard_RE
 import ThompsonConstruct
 
-if __name__ == "__main__":
-    # List of ["Regular Expression", ["Strings"...]]
+def runTests():
+# List of ["Regular Expression", ["Strings"...]]
     # (Infix Regular Expressions)
     tests = [
                 ["(a.b|b*)",   ["", "ab", "b", "bb", "a"]],
                 ["a.(b.b)*.a", ["aa", "bb", "abba", "aba"]],
                 ["1.(0.0)*.1", ["11", "100001", "11001"]]
             ]
+
+    print("TESTS:")
 
     #For each test
     for test in tests:
@@ -25,6 +27,9 @@ if __name__ == "__main__":
         for s in test[1]:
             # Match?
             match = nfa.match(s)
-            print(f"Match '{s}': {match}")
+            print(f"Match '{s}'? {match}")
         # Newline
         print()
+
+if __name__ == "__main__":
+    runTests()

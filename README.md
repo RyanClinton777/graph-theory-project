@@ -12,6 +12,60 @@ Indidentally, This was done in Ubuntu Linux through WSL.
 ...
 
 ## Algorithm
+This program works by applying two algorithms to the given regular expression (RE): 
+1. The **Shunting Yard** algorithm - to convert the given infix RE to postfix notation
+2. **Thompson Construction** algorithm - to convert that postfix RE into an **NDA (Non-Finite Automata).**
+
+It then simply reads each line of the file, and checks if each line of text matches the pattern defined by the RE.
+
+### Shunting Yard - Convert an infix expression to postfix notation
+For human reading, different types of expressions (Mathmatical, Regular) are usually written in [**Infix notation**](https://en.wikipedia.org/wiki/Infix_notation). In this notation, operators are placed between the operands that they apply to, and precedence is indicated with (parenthesis), and overall is decided by an [order of operations](https://en.wikipedia.org/wiki/Order_of_operations) rule such as BOMDAS. E.g. 2+2, a.b
+  
+This is appropriate for humans because characters and operations that should apply to them are grouped together in an intuitive and easily intelligable manner.
+
+[**Postfix notation**](https://en.wikipedia.org/wiki/Reverse_Polish_notation) (aka: Reverse Polish notation) Arranges the expression with the operands first, followed by their operators.
+* **Infix:** 2 + 5 - 3
+* **Postfix:** 2 5 + 3 -
+
+The computer reads left to right. So by the time it reads +, the number stack will contain [2,5]. It applies the operator to the top two numbers on the stack (2+5=7) and puts the result in the stack [7]; then by the time it reaches -, the number stack will contain [7,3], and it does the same thing: (7-3=4). This is a simple example, but it is very efficient when dealing with multiplication and division, expressions with parenthesis etc.
+
+This notation is ideal for computers because:
+1. Formulas can be expressed without parenthesis
+2. It is convenient to evaluate using stacks
+3. It avoids the problems of operator precedence
+
+This according to a document from DePaul University, which gives a much more in depth explaination [Link](https://condor.depaul.edu/ggordon/courses/224/212doc/postfix.txt#:~:text=Postfix%20has%20a%20number%20of,Third%2C%20infix%20operators%20have%20precedence.).
+
+The algorithm works as follows (pseudocode):
+```
+For each character (c) in infix:
+  if c is an operator:
+    While there is still an operator left on the stack
+      AND the operator at the top of the stack has greater precedence
+      AND that operator is not a left parenthesis '(':
+        pop the operator from the operator stack onto the output stack
+    Push c to the operator stack
+  else if c is a left parenthesis '(':
+    push c to the operator stack
+  else if c is a right parenthesis ')':
+    while the top of the operator stack is not a left parenthesis '(':
+      Pop the operator from the operator stack onto the output stack.
+  else (c is an operand):
+    push c to the output stack
+    
+If there is anything left on the operator stack, push it to output.
+```
+E.G. (Spaces are just for readability)
+1. Infix = "2 + 5" [outputStack] [operatorStack]
+2. '2' is an operand > push to output stack [2] []
+3. '+' is an operator > push to operator stack (none of the while... logic applies) [2] [+]
+4. '5' is an operand > push to output stack [2,5] [+]
+5. String finished > Push remaining operators to output [2,5,+] []
+6. Postfix = "2 5 +"
+
+My code was adapted from the pseudo code on the [wikipedia page](https://en.wikipedia.org/wiki/Shunting-yard_algorithm#The_algorithm_in_detail).
+
+### Thompson Construction - Convert a postfix RE to an NFA (Non-Finite Automata)
 ...
 
 ## Questions

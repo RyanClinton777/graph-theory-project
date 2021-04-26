@@ -16,12 +16,12 @@ The program has two positional arguments:
 * **infix** - a regular expression in infix notation
 * **filepath** - a filepath or filename (if in the same directory) for a text file
 ````
-python3 regex.py [infix] [filepath]
+>python3 regex.py [infix] [filepath]
 
 E.G:
-python3 regex.py "(a.b|b*)" "file.txt"
+>python3 regex.py "(a.b|b*)" "file.txt"
 OR
-python3 regex.py "(a.b|b*)" "/home/user/repo/graph-theory-project/file.txt"
+>python3 regex.py "(a.b|b*)" "/home/user/repo/graph-theory-project/file.txt"
 
 ````
 ![image](https://user-images.githubusercontent.com/58789023/116160818-9d818000-a6ea-11eb-99ea-ae344fca4926.png)
@@ -31,7 +31,7 @@ python3 regex.py "(a.b|b*)" "/home/user/repo/graph-theory-project/file.txt"
 
 The user alternatively run a set of tests (from the regTests.py file) with the optional arg ````--test````
 ````
-python3 regex.py "" "" --test
+>python3 regex.py "" "" --test
 ````
 ![image](https://user-images.githubusercontent.com/58789023/116160740-7fb41b00-a6ea-11eb-8b03-b8a1d20a0bbb.png)
 

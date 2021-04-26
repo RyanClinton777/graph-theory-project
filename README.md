@@ -9,7 +9,31 @@ The user inputs a text file (path), and a REGEX search pattern, and the program 
 Indidentally, This was done in Ubuntu Linux through WSL.
 
 ## Instructions
-...
+Requires some version of Python. Only tested with Python3.
+
+The main file is regex.py.
+The program has two positional arguments:
+* **infix** - a regular expression in infix notation
+* **filepath** - a filepath or filename (if in the same directory) for a text file
+````
+python3 regex.py [infix] [filepath]
+
+E.G:
+python3 regex.py "(a.b|b*)" "file.txt"
+OR
+python3 regex.py "(a.b|b*)" "/home/user/repo/graph-theory-project/file.txt"
+
+````
+![image](https://user-images.githubusercontent.com/58789023/116160818-9d818000-a6ea-11eb-99ea-ae344fca4926.png)
+
+![image](https://user-images.githubusercontent.com/58789023/116160786-922e5480-a6ea-11eb-8ae8-4878c185d57c.png)
+
+
+The user alternatively run a set of tests (from the regTests.py file) with the optional arg ````--test````
+````
+python3 regex.py "" "" --test
+````
+![image](https://user-images.githubusercontent.com/58789023/116160740-7fb41b00-a6ea-11eb-8b03-b8a1d20a0bbb.png)
 
 ## Algorithm
 This program works by applying two algorithms to the given regular expression (RE): 

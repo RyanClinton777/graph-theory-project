@@ -14,7 +14,7 @@ Indidentally, This was done in Ubuntu Linux through WSL.
 ## Algorithm
 This program works by applying two algorithms to the given regular expression (RE): 
 1. The **Shunting Yard** algorithm - to convert the given infix RE to postfix notation
-2. **Thompson Construction** algorithm - to convert that postfix RE into an **NDA (Non-Finite Automata).**
+2. **Thompson Construction** algorithm - to convert that postfix RE into an **NDA (Non-deterministic Finite Automaton).**
 
 It then simply reads each line of the file, and checks if each line of text matches the pattern defined by the RE.
 
@@ -65,14 +65,52 @@ E.G. (Spaces are just for readability)
 
 My code was adapted from the pseudo code on the [wikipedia page](https://en.wikipedia.org/wiki/Shunting-yard_algorithm#The_algorithm_in_detail).
 
-### Thompson Construction - Convert a postfix RE to an NFA (Non-Finite Automata)
-...
+### Thompson Construction - Convert a postfix RE to an NFA (Non-deterministic Finite Automaton)
+This algorithm allows us to convert a postfix Regular Expression, into an **NFA (Non-deterministic Finite Automaton)**.
+
+In "NFA" - "Non-deterministic" means it allows many next states and empty(ε, e for simplicity) transitions; and "Finite" means it has a finite number of states ([As explained here](https://www.javatpoint.com/non-deterministic-finite-automata)). What this allows us to do, is essentially be in multiple states at once in one of these automata. 
+
+These e transitions are essential for this algorithm, as they allow us to create a single start and end state to every NFA, which act as standardised interfaces to plug them in to eachother. We can use these mechanics to attatch nfas for each set of operands and operators until we have an NFA that incorperates the entire RE.
+
+#### Operators
+(new state arrows are empty unless specified)
+##### Concatination (*)
+Take a.b
+'a' and 'b' as NFAs look like this:
+
+![image](https://user-images.githubusercontent.com/58789023/116156273-28f71300-a6e3-11eb-8cea-8f119543241f.png)
+
+So to create an NFA for a.b (a concatinate/followed by b), we just need to run our string through them consecutively, only accepting if it makes it through both:
+1. Make the end point of a no longer an accept state
+2. Make the end point of a point to the start state of b
+
+![image](https://user-images.githubusercontent.com/58789023/116157034-33fe7300-a6e4-11eb-97a5-b9c5ce87a8a8.png)
+
+##### Kleen Star (\*)
+Kleen star means 0 or more
+For example: a* would accept "", "a", "aa" etc
+1. Create new start and end states
+2. Make the new start state point to the old start state, and the new end state
+3. Make the old end state no longer accept, and now point to both the new end state, and old start state
+
+![image](https://user-images.githubusercontent.com/58789023/116158437-96587300-a6e6-11eb-8b28-916e7b8f9a34.png)
+
+##### OR (|)
+Or. Either.
+E.g. a|b:
+
+1. Create new end state
+2. Create new start state with arrows to the start state of both operand NFAs (a and b)
+3. Make end states of both NFAs no longer accept
+4. Make end states of both NFAs point to the new end state
+
+![image](https://user-images.githubusercontent.com/58789023/116159121-99a02e80-a6e7-11eb-9e30-afa5d218f3ee.png)
 
 ## Questions
 ### What is a regular expression?
 **Regular expressions (Regex)** are strings that define a pattern. They are a way of performing advanced, dynamic, programatic find and replace operations on a piece of text. They work by providing a syntax for the user to enter a pattern, which are then checked against the text. *Regular Expressions are equivalent to **Finite Automata*** (although some libraries and implementations can differ from this), and we can think of a regular expression being input by the user as creating an equivalent finite automoton, which then runs on the text.
 
-E.g. "a.b" (a followed/concatinated by b) is equivilent to the following NFA:
+E.g. "a.b" (a followed/concatinated by b) is equivalent to the following NFA:
 ![image](https://user-images.githubusercontent.com/58789023/113922922-cf847e00-97df-11eb-90bf-ace16f2b16b3.png)
 
 In normal search operations, an exact phrase must be entered for matches to be found, but regular expressions allow us to do much more advanced searches. 

@@ -106,6 +106,23 @@ E.g. a|b:
 
 ![image](https://user-images.githubusercontent.com/58789023/116159121-99a02e80-a6e7-11eb-9e30-afa5d218f3ee.png)
 
+#### Matching
+To check if a string matches this DFA:
+````
+Create stack of current and previous states
+occupy and explore this state (including from consecutive empty arrows)
+For each character (c) in string:
+  previous states = current states
+  current states = []
+  for state in previousStates:
+    If current state has a label matching the current character:
+      occupy and explore this state (including from consecutive empty arrows)
+      
+If any states are accept states:
+  return true
+else return false
+````
+
 ## Questions
 ### What is a regular expression?
 **Regular expressions (Regex)** are strings that define a pattern. They are a way of performing advanced, dynamic, programatic find and replace operations on a piece of text. They work by providing a syntax for the user to enter a pattern, which are then checked against the text. *Regular Expressions are equivalent to **Finite Automata*** (although some libraries and implementations can differ from this), and we can think of a regular expression being input by the user as creating an equivalent finite automoton, which then runs on the text.

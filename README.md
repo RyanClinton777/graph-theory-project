@@ -26,14 +26,15 @@ OR
 ````
 ![image](https://user-images.githubusercontent.com/58789023/116160818-9d818000-a6ea-11eb-99ea-ae344fca4926.png)
 
-![image](https://user-images.githubusercontent.com/58789023/116160786-922e5480-a6ea-11eb-8ae8-4878c185d57c.png)
+![image](https://user-images.githubusercontent.com/58789023/116934327-c1017900-ac5c-11eb-96a7-ab98b23cd167.png)
 
 
 The user alternatively run a set of tests (from the regTests.py file) with the optional arg ````--test````
 ````
 >python3 regex.py "" "" --test
 ````
-![image](https://user-images.githubusercontent.com/58789023/116160740-7fb41b00-a6ea-11eb-8b03-b8a1d20a0bbb.png)
+![image](https://user-images.githubusercontent.com/58789023/116934427-e2626500-ac5c-11eb-8a32-a8b54d9e3fa1.png)
+
 
 ## Algorithm
 This program works by applying two algorithms to the given regular expression (RE): 

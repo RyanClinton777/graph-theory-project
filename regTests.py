@@ -10,7 +10,7 @@ def runTests():
                 ["1.(0.0)*.1", ["11", "100001", "11001"]]
             ]
 
-    print("TESTS:")
+    print("\nTESTS:")
 
     #For each test
     for test in tests:

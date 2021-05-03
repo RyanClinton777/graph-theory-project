@@ -55,6 +55,8 @@ if not isTest:
             
             # Pass line of text into our NFA as string, report match?
             match = nfa.match(line)
-            print(f"Match '{line}': {match}")
+            # Print line if it matches
+            if match:
+                print(line)
 else:
     regTests.runTests()

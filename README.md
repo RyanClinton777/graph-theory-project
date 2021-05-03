@@ -180,14 +180,12 @@ Advanced replacement operations can then be done any matching text if desired. W
 ### How do regular expressions differ across implementations?
 The exact syntax for an operation, and features available depends on the **Regular Expression Engine** being used. These are usually associated with a particular programming language, and are like different Regex languages themselves. These different implementations of regular expressions are called **regex flavors.** Different IDEs, code editors, and Database Management Systems will have their own engines, so it is important to know which one you are working with; for example, most web editors and tools will use the ECMA Javascript variety, wheras eclipse uses a java based flavor; python has it's own regex library.
 
-Sometimes, the same program might use several different flavors for different functions. For example, Visual Studio Code uses a module that works with a RUST-based implementation for file searches, but uses Javascript syntax for code searches. 
+Sometimes, the same program might use several different flavors for different functions. For example, Visual Studio Code uses a module that works with a RUST-based implementation for file searches, but uses Javascript syntax for code searches.
   [1]: https://github.com/Microsoft/vscode/issues/24626
   [2]: https://github.com/Microsoft/vscode/issues/8635
   [3]: https://stackoverflow.com/questions/42179046/what-flavor-of-regex-does-visual-studio-code-use
 
 Most Regex engines are very similar in principle, and many simple operations can even be interchangeable between them.
 
-
-
 ### Can all formal languages be encoded as regular expressions?
-...
+"A formal language consists of words whose letters are taken from an alphabet and are well-formed according to a specific set of rules." [From Wikipedia](https://en.wikipedia.org/wiki/Formal_language). These can be converted to automata and so can be encoded as regular expressions.
